@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MusicLoad</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #050509;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Neon arxa işıqlar */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+      z-index: -1;
+    }
+
+    body::before {
+      background: #8b00ff;
+      top: -100px;
+      left: -100px;
+    }
+
+    body::after {
+      background: #00eaff;
+      bottom: -100px;
+      right: -100px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 38px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -2px;
+
+      color: #fff;
+
+      text-shadow:
+        0 0 5px #fff,
+        0 0 15px #a855f7,
+        0 0 30px #8b5cf6;
+    }
+
+    .logo span {
+      color: #00eaff;
+
+      text-shadow:
+        0 0 5px #00eaff,
+        0 0 15px #00eaff,
+        0 0 30px #00eaff;
+    }
+
+    .subtitle {
+      color: #8f8f9d;
+      font-size: 14px;
+      margin-bottom: 35px;
+    }
+
+    .box {
+      padding: 25px;
+      border: 1px solid rgba(0, 234, 255, .25);
+      border-radius: 22px;
+
+      background: rgba(15, 15, 25, .75);
+      backdrop-filter: blur(15px);
+
+      box-shadow:
+        0 0 20px rgba(0, 234, 255, .08),
+        inset 0 0 20px rgba(139, 92, 246, .04);
+    }
+
+    .input-box {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      height: 58px;
+      padding: 0 18px;
+
+      background: #080810;
+      color: white;
+
+      border: 1px solid #333344;
+      border-radius: 13px;
+
+      outline: none;
+      font-size: 14px;
+
+      transition: .3s;
+    }
+
+    input::placeholder {
+      color: #666675;
+    }
+
+    input:focus {
+      border-color: #00eaff;
+
+      box-shadow:
+        0 0 8px #00eaff,
+        0 0 25px rgba(0, 234, 255, .25);
+    }
+
+    button {
+      width: 100%;
+      height: 58px;
+
+      border: none;
+      border-radius: 13px;
+
+      background: linear-gradient(
+        90deg,
+        #7c3aed,
+        #00c8ff
+      );
+
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 0 10px rgba(124, 58, 237, .7),
+        0 0 25px rgba(0, 200, 255, .25);
+
+      transition: .25s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 0 15px #7c3aed,
+        0 0 35px #00c8ff;
+    }
+
+    button:active {
+      transform: scale(.97);
+    }
+
+    .status {
+      display: none;
+      margin-top: 18px;
+
+      padding: 13px;
+      border-radius: 10px;
+
+      background: rgba(0, 234, 255, .06);
+      border: 1px solid rgba(0, 234, 255, .2);
+
+      color: #00eaff;
+      font-size: 13px;
+    }
+
+    .bottom {
+      margin-top: 25px;
+      color: #555563;
+      font-size: 11px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+
+      background: #00ff9d;
+      border-radius: 50%;
+
+      box-shadow: 0 0 10px #00ff9d;
+
+      margin-right: 6px;
+    }
+
+    @media (max-width: 400px) {
+      .logo {
+        font-size: 34px;
+      }
+
+      .box {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">
+      Music<span>Load</span>
+    </div>
+
+    <div class="subtitle">
+      Fast • Simple • Music
+    </div>
+
+    <div class="box">
+
+      <div class="input-box">
+        <input
+          id="url"
+          type="url"
+          placeholder="YouTube linkini daxil et..."
+        >
+      </div>
+
+      <button onclick="downloadMusic()">
+        ⚡ DOWNLOAD MP3
+      </button>
+
+      <div class="status" id="status">
+        ✓ Link qəbul edildi
+      </div>
+
+    </div>
+
+    <div class="bottom">
+      <span class="dot"></span>
+      MusicLoad online
+    </div>
+
+  </div>
+
+
+  <script>
+    function downloadMusic() {
+
+      const input = document.getElementById("url");
+      const status = document.getElementById("status");
+
+      const url = input.value.trim();
+
+      if (!url) {
+        alert("YouTube linkini daxil et bro 😄");
+        return;
+      }
+
+      if (
+        !url.includes("youtube.com") &&
+        !url.includes("youtu.be")
+      ) {
+        alert("Düzgün YouTube linki daxil et.");
+        return;
+      }
+
+      status.style.display = "block";
+      status.innerHTML = "✓ Link qəbul edildi";
+    }
+  </script>
+
+</body>
+</html>
